@@ -6,7 +6,7 @@ Add swagger comment to any ruby file for generating swagger response doc struct
 Add this line to your application's Gemfile:
 
 ```
-gem 'acts_as_doc'
+gem 'acts_as_doc', '~> 1.0'
 ```
 
 # Usage
