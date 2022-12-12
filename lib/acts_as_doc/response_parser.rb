@@ -24,7 +24,10 @@ module ActsAsDoc
       geography: 'string',
       json: 'object',
       jsonb: 'object',
-      array: 'array'
+      array: 'array',
+      datetime: 'string',
+      date: 'string',
+      boolean: 'boolean'
     }.freeze
 
     # 处理注释
