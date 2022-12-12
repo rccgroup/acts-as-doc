@@ -50,12 +50,18 @@ module ActsAsDoc
       hash[name] = {} unless hash.key?(name)
 
       if arr.empty?
-        if klass && (matches = desc.match(/^\(([a-zA-Z]+)\)$/))
+        if klass && (matches = desc.match(/^\(([a-z,\s_A-Z]+)\)$/))
           columns = Object.const_get(klass).columns.map do |column|
-            [ column.name.to_s, [TYPE_MAPPER[column.type], column.comment] ]
+            column_type = if column.respond_to?(:array?) && column.array?
+                            'array'
+                          else
+                            TYPE_MAPPER[column.type]
+                          end
+            [ column.name.to_s, [column_type, column.comment] ]
           end.to_h
 
           matches[1].split(',').each do |attr_name|
+            attr_name.strip!
             c_type, c_desc = columns[attr_name]
             self.props_recursion!(hash, "$#{name}.#{attr_name}", c_type, c_desc)
           end
@@ -86,10 +92,10 @@ module ActsAsDoc
         if tag == '@prop'
           desc = arr[3..] ? arr[3..].join(' ') : ''
 
-          matches = type.match(/\[(?<type>[a-zA-Z<>]+)\]/)
+          matches = type.match(/\[(?<type>[a-zA-Z<>:]+)\]/)
           type = matches ? matches[:type] : 'string'
 
-          klass_matches = type.match(/(?<type>[a-zA-Z]+)<(?<klass>[a-zA-Z]+)>/)
+          klass_matches = type.match(/(?<type>[a-zA-Z]+)<(?<klass>[a-zA-Z:]+)>/)
           klass = nil
           if klass_matches
             type = SUPPORT_TYPES.include?(klass_matches[:type]) ? klass_matches[:type] : 'string'

@@ -40,7 +40,8 @@ class ActsAsDocTest < Test::Unit::TestCase
             description: 'book author',
             type: 'object',
             properties: {
-              'name' => { description: 'book author name', type: 'string' }
+              'name' => { description: 'book author name', type: 'string' },
+              'address' => { description: 'book author address', type: 'string' }
             }
           },
           'status' => { description: 'book status', type: 'integer' }

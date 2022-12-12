@@ -6,13 +6,14 @@ class Book
       Column.new(:id, :integer, 'book id')
     ]
   end
-end
 
-class BookAuthor
-  def self.columns
-    [
-      Column.new(:name, :string, 'book author name')
-    ]
+  class Author
+    def self.columns
+      [
+        Column.new(:name, :string, 'book author name'),
+        Column.new(:address, :string, 'book author address')
+      ]
+    end
   end
 end
 
@@ -25,6 +26,6 @@ class B
   # @prop [array] $item book item
   # @prop [array<Book>] $item (id)
   # @prop [object] $item.$author book author
-  # @prop [object<BookAuthor>] $item.$author (name)
+  # @prop [object<Book::Author>] $item.$author (name, address)
   # @prop [integer] $item.status book status
 end
