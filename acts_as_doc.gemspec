@@ -1,7 +1,7 @@
 # rubocop:disable all
 Gem::Specification.new do |s|
   s.name        = "acts_as_doc"
-  s.version     = "1.1.2"
+  s.version     = "1.2.0"
   s.summary     = "Generate swagger response doc"
   s.description = "Add swagger comment to any ruby file for generating swagger response doc struct"
   s.authors     = ["alex.zang"]
