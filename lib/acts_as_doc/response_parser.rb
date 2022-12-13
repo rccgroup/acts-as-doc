@@ -66,15 +66,20 @@ module ActsAsDoc
           matches[1].split(',').each do |attr_name|
             attr_name.strip!
             c_type, c_desc = columns[attr_name]
-            self.props_recursion!(hash, "$#{name}.#{attr_name}", c_type, c_desc)
+            self.props_recursion!(hash, "$#{name}.#{attr_name}", c_type, c_desc.to_s)
           end
         else
-          hash[name].merge!(type: type, description: desc)
+          hash[name].merge!(type: type, description: desc.to_s)
         end
       else
         nest_hash = hash[name]
-        nest_hash[:properties] = {} unless nest_hash.key?(:properties)
-        self.props_recursion!(nest_hash[:properties], arr.join('.'), type, desc, klass)
+        item_hash = if nest_hash[:type].to_s == 'array'
+                      nest_hash[:items] ||= {type: 'object', properties: {}}
+                      nest_hash[:items][:properties]
+                    else
+                      nest_hash[:properties] ||= {}
+                    end
+        self.props_recursion!(item_hash, arr.join('.'), type, desc.to_s, klass)
       end
 
       hash
@@ -107,11 +112,11 @@ module ActsAsDoc
 
           if name.start_with?(':')
             name = name.sub(/^:/, '')
-            schema[name] = { type: type, description: desc }
+            schema[name] = { type: type, description: desc.to_s }
           end
 
           if name.start_with?(REF_FLAG)
-            self.class.props_recursion!(schema, name, type, desc, klass)
+            self.class.props_recursion!(schema, name, type, desc.to_s, klass)
           end
         end
       end
